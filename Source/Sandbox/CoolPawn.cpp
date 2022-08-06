@@ -60,6 +60,11 @@ ACoolPawn::ACoolPawn()
    OurMovementComponent = CreateDefaultSubobject<UCoolPawnMC>(TEXT("CustomMovementComponent"));
    OurMovementComponent->UpdatedComponent = RootComponent;
 
+   //GENOUYS
+   //GENIOUYS
+   //GENIOUS AND CORRECT
+   // FORGOT ONE THING
+
 }
 
 // Called when the game starts or when spawned
