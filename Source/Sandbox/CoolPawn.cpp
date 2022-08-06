@@ -60,9 +60,7 @@ ACoolPawn::ACoolPawn()
    OurMovementComponent = CreateDefaultSubobject<UCoolPawnMC>(TEXT("CustomMovementComponent"));
    OurMovementComponent->UpdatedComponent = RootComponent;
 
-   //GENOUYS
-   //GENIOUYS
-   //GENIOUS AND CORRECT
+   // GENIOUS AND CORRECT
    // FORGOT ONE THING
 
 }
