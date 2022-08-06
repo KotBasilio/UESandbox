@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "CoolPawnMC.h"
 #include "CoolPawn.generated.h"
 
 UCLASS()
@@ -29,4 +30,13 @@ public:
    UPROPERTY()
       class UParticleSystemComponent* OurParticleSystem;
 
+   UPROPERTY()
+      class UCoolPawnMC* OurMovementComponent;
+
+	virtual UPawnMovementComponent* GetMovementComponent() const override { return OurMovementComponent; }
+
+   void MoveForward(float AxisValue);
+   void MoveRight(float AxisValue);
+   void Turn(float AxisValue);
+   void ParticleToggle();
 };

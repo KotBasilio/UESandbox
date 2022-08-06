@@ -44,7 +44,7 @@ ACoolPawn::ACoolPawn()
    // Use a spring arm to give the camera smooth, natural-feeling motion.
    USpringArmComponent* SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
    SpringArm->SetupAttachment(RootComponent);
-   SpringArm->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
+   SpringArm->SetRelativeRotation(FRotator(-25.f, 0.f, 0.f));
    SpringArm->TargetArmLength = 400.0f;
    SpringArm->bEnableCameraLag = true;
    SpringArm->CameraLagSpeed = 3.0f;
@@ -55,6 +55,10 @@ ACoolPawn::ACoolPawn()
 
    // Take control of the default player
    AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+   // Create an instance of our movement component, and tell it to update the root.
+   OurMovementComponent = CreateDefaultSubobject<UCoolPawnMC>(TEXT("CustomMovementComponent"));
+   OurMovementComponent->UpdatedComponent = RootComponent;
 
 }
 
@@ -73,9 +77,46 @@ void ACoolPawn::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void ACoolPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ACoolPawn::SetupPlayerInputComponent(UInputComponent* InInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super::SetupPlayerInputComponent(InInputComponent);
 
+   InInputComponent->BindAction("ParticleToggle", IE_Pressed, this, &ACoolPawn::ParticleToggle);
+
+   InInputComponent->BindAxis("MoveForward", this, &ACoolPawn::MoveForward);
+   InInputComponent->BindAxis("MoveRight", this, &ACoolPawn::MoveRight);
+   InInputComponent->BindAxis("Turn", this, &ACoolPawn::Turn);
+}
+
+void ACoolPawn::MoveForward(float AxisValue)
+{
+   if (OurMovementComponent && (OurMovementComponent->UpdatedComponent == RootComponent))
+   {
+      OurMovementComponent->AddInputVector(GetActorForwardVector() * AxisValue);
+   }
+
+}
+
+void ACoolPawn::MoveRight(float AxisValue)
+{
+   if (OurMovementComponent && (OurMovementComponent->UpdatedComponent == RootComponent))
+   {
+      OurMovementComponent->AddInputVector(GetActorRightVector() * AxisValue);
+   }
+}
+
+void ACoolPawn::Turn(float AxisValue)
+{
+   FRotator NewRotation = GetActorRotation();
+   NewRotation.Yaw += AxisValue;
+   SetActorRotation(NewRotation);
+}
+
+void ACoolPawn::ParticleToggle()
+{
+   if (OurParticleSystem && OurParticleSystem->Template)
+   {
+      OurParticleSystem->ToggleActive();
+   }
 }
 
